@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    #news-widget {
+  width: 80%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+#news-widget h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#news-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#news-items .news-item {
+  width: 48%;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+}
+
+#news-items .news-item h2 {
+  margin-bottom: 10px;
+}
+
+</style>
+<body>
+   <div id="news-widget">
+  
+</div>
+
+
+<script>
+    // Create a new XMLHttpRequest object
+var xhr = new XMLHttpRequest();
+
+// Open a connection to the RSS feed
+xhr.open("GET", "http://feeds.bbci.co.uk/news/rss.xml", true);
+
+// Send the request
+xhr.send();
+
+// Wait for the request to complete
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4 && xhr.status == 200) {
+    // Parse the RSS feed data
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(xhr.responseText, "text/xml");
+
+    // Get the news items from the RSS feed
+    var newsItems = xmlDoc.getElementsByTagName("item");
+
+    // Loop through the news items
+    for (var i = 0; i < newsItems.length; i++) {
+      // Get the title and description of the news item
+      var title = newsItems[i].getElementsByTagName("title")[0].innerHTML;
+      var description = newsItems[i].getElementsByTagName("description")[0].innerHTML;
+
+      // Create a new HTML element to display the news item
+      var newsItem = document.createElement("div");
+      newsItem.innerHTML = "<h2>" + title + "</h2><p>" + description + "</p>";
+
+      // Add the news item to the widget
+      document.getElementById("news-widget").appendChild(newsItem);
+    }
+  }
+};
+
+</script>
+</body>
+</html>
